@@ -97,7 +97,7 @@ class CheckBalanceFrame extends JFrame {
 
     public CheckBalanceFrame(String action) {
         try {
-            accountService = (Account) Naming.lookup("rmi://localhost:5300/AccountService");
+            accountService = (Account) Naming.lookup("rmi://localhost:5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -167,7 +167,7 @@ class WithdrawFrame extends JFrame {
 
     public WithdrawFrame(String action) {
         try {
-            accountService = (Account) Naming.lookup("rmi://localhost:5300/AccountService");
+            accountService = (Account) Naming.lookup("rmi://localhost:5200:5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -251,7 +251,7 @@ class SendMoneyFrame extends JFrame {
     public SendMoneyFrame(String action) {
         try {
             // Lookup the server object
-            accountService = (Account) Naming.lookup("rmi://localhost:5300/AccountService");
+            accountService = (Account) Naming.lookup("rmi://localhost:5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
