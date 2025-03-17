@@ -11,7 +11,7 @@ public class AccountImpl extends UnicastRemoteObject implements Account {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // Establish connection to MySQL
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankDB", "root", "zack3854?");
+            conn = DriverManager.getConnection("jdbc:mysql://192.168.137.184:3306/bankDB", "root", "zack3854?");
             System.out.println("Connected to the Database!");
         }catch (ClassNotFoundException e) {
             e.printStackTrace();
