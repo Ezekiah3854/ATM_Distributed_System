@@ -8,6 +8,12 @@ import java.rmi.Naming;
 
 public class mainFrame extends JFrame {
 
+    private String serverIP; // Store the user-entered server IP
+
+    public mainFrame(String serverIP) {
+        this.serverIP = serverIP; // Store the passed IP
+    }
+
     public void initialize() {
         /********** Form Panel **********/
         JPanel mainPanel = new JPanel();
@@ -45,7 +51,7 @@ public class mainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current frame
-                new SendMoneyFrame("Send Money");
+                new SendMoneyFrame("Send Money", serverIP);
             }
         });
 
@@ -53,7 +59,7 @@ public class mainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current frame
-                new WithdrawFrame("Withdraw");
+                new WithdrawFrame("Withdraw", serverIP);
             }
         });
 
@@ -61,7 +67,7 @@ public class mainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current frame
-                new CheckBalanceFrame("Check Balance");
+                new CheckBalanceFrame("Check Balance", serverIP);
             }
         });
 
@@ -85,8 +91,14 @@ public class mainFrame extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            mainFrame frame = new mainFrame();
-            frame.initialize();
+            String serverIP = JOptionPane.showInputDialog("Enter the server IP:");
+            if (serverIP != null && !serverIP.trim().isEmpty()) {
+                mainFrame frame = new mainFrame(serverIP);
+                frame.initialize();
+            } else {
+                JOptionPane.showMessageDialog(null, "Server IP is required to proceed!");
+                System.exit(0);
+            }
         });
     }
 }
@@ -95,9 +107,9 @@ public class mainFrame extends JFrame {
 class CheckBalanceFrame extends JFrame {
     private Account accountService;
 
-    public CheckBalanceFrame(String action) {
+    public CheckBalanceFrame(String action, String serverIP) {
         try {
-            accountService = (Account) Naming.lookup("rmi://192.168.137.184:5200/AccountService");
+            accountService = (Account) Naming.lookup("rmi://" + serverIP + ":5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -135,7 +147,7 @@ class CheckBalanceFrame extends JFrame {
                 pinField.setText("");
 
                 dispose(); 
-                new mainFrame().initialize();
+                new mainFrame(serverIP).initialize();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Balance check failed: " + ex.getMessage());
             }
@@ -151,7 +163,7 @@ class CheckBalanceFrame extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 22));
         backButton.addActionListener(e -> {
             dispose(); 
-            new mainFrame().initialize(); 
+            new mainFrame(serverIP).initialize(); 
         });
         transPanel.add(backButton);
 
@@ -165,9 +177,9 @@ class CheckBalanceFrame extends JFrame {
 class WithdrawFrame extends JFrame {
     private Account accountService;
 
-    public WithdrawFrame(String action) {
+    public WithdrawFrame(String action, String serverIP) {
         try {
-            accountService = (Account) Naming.lookup("rmi://192.168.137.184:5200/AccountService");
+            accountService = (Account) Naming.lookup("rmi://" + serverIP + ":5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -219,7 +231,7 @@ class WithdrawFrame extends JFrame {
                 pinField.setText("");
 
                 dispose(); 
-                new mainFrame().initialize();
+                new mainFrame(serverIP).initialize();
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Withdrawal failed: " + ex.getMessage());
@@ -233,7 +245,7 @@ class WithdrawFrame extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 22));
         backButton.addActionListener(e -> {
             dispose(); 
-            new mainFrame().initialize(); 
+            new mainFrame(serverIP).initialize(); 
         });
         transPanel.add(backButton);
 
@@ -248,10 +260,10 @@ class WithdrawFrame extends JFrame {
 class SendMoneyFrame extends JFrame {
     private Account accountService; // RMI object
 
-    public SendMoneyFrame(String action) {
+    public SendMoneyFrame(String action, String serverIP) {
         try {
             // Lookup the server object
-            accountService = (Account) Naming.lookup("rmi://192.168.137.184:5200/AccountService");
+            accountService = (Account) Naming.lookup("rmi://" + serverIP + ":5200/AccountService");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Server connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -315,7 +327,7 @@ class SendMoneyFrame extends JFrame {
                 pinField.setText("");
 
                 dispose(); 
-                new mainFrame().initialize();
+                new mainFrame(serverIP).initialize();
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Transaction failed: " + ex.getMessage());
@@ -329,7 +341,7 @@ class SendMoneyFrame extends JFrame {
         backButton.setFont(new Font("Arial", Font.PLAIN, 22));
         backButton.addActionListener(e -> {
             dispose(); 
-            new mainFrame().initialize(); 
+            new mainFrame(serverIP).initialize(); 
         });
         transPanel.add(backButton);
 
